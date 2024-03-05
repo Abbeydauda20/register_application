@@ -1,5 +1,5 @@
 Video Link -- https://youtu.be/e42hIYkvxoQ
-============================================================= Install and Configure the Jenkins-Master & Jenkins-Agent =============================================================
+================================Install and Configure the Jenkins-Master & Jenkins-Agent =============================================================
 ## Install Java
 $ sudo apt update
 $ sudo apt upgrade
@@ -15,6 +15,7 @@ curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
 echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
   https://pkg.jenkins.io/debian binary/ | sudo tee \
   /etc/apt/sources.list.d/jenkins.list > /dev/null
+
 sudo apt-get update
 sudo apt-get install jenkins
 
@@ -47,16 +48,19 @@ $ cd .ssh
     $ grant all privileges on DATABASE sonarqube to sonar;
     $ \q
     $ exit
+
 ## Add Adoptium repository
     $ sudo bash
     $ wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public | tee /etc/apt/keyrings/adoptium.asc
     $ echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] https://packages.adoptium.net/artifactory/deb $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" | tee /etc/apt/sources.list.d/adoptium.list
+ 
  ## Install Java 17
     $ apt update
     $ apt install temurin-17-jdk
     $ update-alternatives --config java
     $ /usr/bin/java --version
     $ exit 
+
 ## Linux Kernel Tuning
    # Increase Limits
     $ sudo vim /etc/security/limits.conf
@@ -64,7 +68,7 @@ $ cd .ssh
     sonarqube   -   nofile   65536
     sonarqube   -   nproc    4096
 
-    # Increase Mapped Memory Regions
+ ## Increase Mapped Memory Regions
     sudo vim /etc/sysctl.conf
     //Paste the below values at the bottom of the file
     vm.max_map_count = 262144
@@ -75,16 +79,19 @@ $ cd .ssh
     $ sudo apt install unzip
     $ sudo unzip sonarqube-9.9.0.65466.zip -d /opt
     $ sudo mv /opt/sonarqube-9.9.0.65466 /opt/sonarqube
+
 ## Create user and set permissions
      $ sudo groupadd sonar
      $ sudo useradd -c "user to run SonarQube" -d /opt/sonarqube -g sonar sonar
      $ sudo chown sonar:sonar /opt/sonarqube -R
+
 ## Update Sonarqube properties with DB credentials
      $ sudo vim /opt/sonarqube/conf/sonar.properties
      //Find and replace the below values, you might need to add the sonar.jdbc.url
      sonar.jdbc.username=sonar
      sonar.jdbc.password=sonar
      sonar.jdbc.url=jdbc:postgresql://localhost:5432/sonarqube
+
 ## Create service for Sonarqube
 $ sudo vim /etc/systemd/system/sonar.service
 //Paste the below into the file
