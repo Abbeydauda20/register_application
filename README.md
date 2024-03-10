@@ -171,32 +171,40 @@ $ kubectl get nodes
 3 ) Now we can view the pods created in the ArgoCD namespace.
     $ kubectl get pods -n argocd
 
-4 ) To interact with the API Server we need to deploy the CLI:
+4 ) To interact with the API Server we need to deploy the ArgoCD CLI:
     $ curl --silent --location -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.4.7/argocd-linux-amd64
     $ chmod +x /usr/local/bin/argocd
 
-5 ) Expose argocd-server
+5 ) Expose argocd-server to the external world by creating the LoadBalancer
     $ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
 
 6 ) Wait about 2 minutes for the LoadBalancer creation
     $ kubectl get svc -n argocd
 
-7 ) Get pasword and decode it.
+7 ) Get pasword of the ArgoCD and decode it to base64.
     $ kubectl get secret argocd-initial-admin-secret -n argocd -o yaml
     $ echo WXVpLUg2LWxoWjRkSHFmSA== | base64 --decode
+    login to ArgoCD on the UI with the LB url and update the password
 
-## Add EKS Cluster to ArgoCD
+## Add EKS Cluster to ArgoCD ie configure ArgoCD with the EKS Cluster
 9 ) login to ArgoCD from CLI
     $ argocd login a2255bb2bb33f438d9addf8840d294c5-785887595.ap-south-1.elb.amazonaws.com --username admin
 
 10 ) 
      $ argocd cluster list
 
-11 ) Below command will show the EKS cluster
+11 ) Below command will show the EKS cluster, this will produce details of the EKS cluster to add to the ArgoCD settings
      $ kubectl config get-contexts
 
 12 ) Add above EKS cluster to ArgoCD with below command
      $ argocd cluster add i-08b9d0ff0409f48e7@virtualtechbox-cluster.ap-south-1.eksctl.io --name virtualtechbox-eks-cluster
+     run argocd cluster list to display the new EKS default argocd cluster plus the EKS cluster just added
+
+     13) COnfigure ArgoCD to deploy pods on EKS and configure manifest file to connect with the ArgoCD cluster
+     go to the settings on the ArgoCD UI or Dashboard and do the necessary configuration with the manifest repo on Github
+     Deploy the application on the git manifest repo on ArgoCD by clicking on the NewApp link on ArgoCD Dashboard
+     To Automate the Deployment go to the Jenkins and Create a CD job and pass all the necessary manifest repo details to Jenkins
+     N.B: Add one more stage to your Jenkins file which is to trigger CD pipeline
 
 13 ) $ kubectl get svc
 ============================================================= Cleanup =============================================================
