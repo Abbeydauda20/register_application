@@ -205,6 +205,7 @@ $ kubectl get nodes
      Deploy the application on the git manifest repo on ArgoCD by clicking on the NewApp link on ArgoCD Dashboard
      To Automate the Deployment go to the Jenkins and Create a CD job and pass all the necessary manifest repo details to Jenkins
      N.B: Add one more stage to your Jenkins file which is to trigger CD pipeline
+     Create Jenkinsfile on the manifest repo to handle the CD part
 
 13 ) $ kubectl get svc
 ============================================================= Cleanup =============================================================
