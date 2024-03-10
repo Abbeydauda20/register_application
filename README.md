@@ -206,6 +206,7 @@ $ kubectl get nodes
      To Automate the Deployment go to the Jenkins and Create a CD job and pass all the necessary manifest repo details to Jenkins
      N.B: Add one more stage to your Jenkins file which is to trigger CD pipeline
      Create Jenkinsfile on the manifest repo to handle the CD part
+     Set up Webhook or Poll SCM on the CI Jenkinsfile
 
 13 ) $ kubectl get svc
 ============================================================= Cleanup =============================================================
